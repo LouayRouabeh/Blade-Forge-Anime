@@ -1,43 +1,22 @@
-import React, { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
-import { Text } from "@chakra-ui/react";
-
-interface Anime {
-  id: string;
-  title: string;
-}
-
-interface fetchAnimesResponse {
-  data: Anime[];
-}
+import { SimpleGrid, Text } from "@chakra-ui/react";
+import useAnime from "../hooks/useAnime";
+import AnimeCard from "./AnimeCard";
 
 const AnimeGrid = () => {
-  const [animeseries, setAnime] = useState<Anime[]>([]);
-  const [error, setError] = useState("");
-  useEffect(() => {
-    apiClient
-      .get<fetchAnimesResponse>("/anime", {
-        params: {
-          Page: 1,
-          Size: 10,
-        },
-      })
-      .then((res) => {
-        console.log(res.data.data);
-        setAnime(res.data.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-        console.error(err);
-      });
-  }, []);
+  const { animeseries, error } = useAnime();
   return (
     <>
       {error && <Text>{error}</Text>}
-      <ul>
+      <SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        padding="10px"
+        spacing={10}
+      >
         {animeseries &&
-          animeseries.map((anime) => <li key={anime.title}>{anime.title}</li>)}
-      </ul>
+          animeseries.map((anime) => (
+            <AnimeCard key={anime.id} anime={anime}></AnimeCard>
+          ))}
+      </SimpleGrid>
     </>
   );
 };
