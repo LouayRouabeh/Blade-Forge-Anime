@@ -2,10 +2,17 @@ import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { CanceledError } from "axios";
 
+
+
+
 export interface Anime {
     id: string;
     title: string;
+    alternativeTitles: string[];
+    status: string;
     image: string;
+    genres: string[];
+    episodes: number;
   }
   
   interface fetchAnimesResponse {

@@ -1,6 +1,7 @@
-import React from "react";
+import { FaCheckCircle } from "react-icons/fa";
 import { Anime } from "../hooks/useAnime";
-import { Card, CardBody, Heading, Image } from "@chakra-ui/react";
+import { Card, CardBody, HStack, Heading, Image, Text } from "@chakra-ui/react";
+import NbEpisodes from "./NbEpisodes";
 
 interface Props {
   anime: Anime;
@@ -11,6 +12,15 @@ const AnimeCard = ({ anime }: Props) => {
       <Image src={anime.image}></Image>
       <CardBody>
         <Heading fontSize="2xl">{anime.title}</Heading>
+        <Text>{anime.genres.join(", ")}</Text>
+        <HStack justifyContent="space-between">
+          {anime.status === "Finished Airing" ? (
+            <FaCheckCircle color="green" />
+          ) : (
+            <FaCheckCircle color="orange" />
+          )}
+          <NbEpisodes episodes={anime.episodes}></NbEpisodes>
+        </HStack>
       </CardBody>
     </Card>
   );
