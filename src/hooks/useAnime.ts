@@ -22,8 +22,11 @@ export interface Anime {
 const useAnime = () => {
     const [animeseries, setAnime] = useState<Anime[]>([]);
     const [error, setError] = useState("");
+    const [isLoading, setLoading] = useState(false);
     useEffect(() => {
       const controller = new AbortController();  
+
+      setLoading(true)
       apiClient
         .get<fetchAnimesResponse>("/anime",{
           params: {
@@ -35,16 +38,18 @@ const useAnime = () => {
         .then((res) => {
           console.log(res.data.data);
           setAnime(res.data.data);
+          setLoading(false)
         })
         .catch((err) => {
           if (err instanceof CanceledError) return;
           setError(err.message);
+          setLoading(false)
           console.error(err);
         });
         return () => controller.abort();
     }, []);
 
-    return {animeseries,error}
+    return {animeseries,error, isLoading}
 }
 
 export default useAnime;
